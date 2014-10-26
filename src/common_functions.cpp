@@ -114,6 +114,36 @@ void draw_buttons()
     glEnd();
 }
 
+bool reset_pressed(float x, float y)
+{
+    if(x >= RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0 &&
+       x <= RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0 &&
+       y >= RIGHT_MENU_SPACE &&
+       y <= RIGHT_MENU_SPACE + TEXT_AREA_HEIGHT )
+        return true;
+    return false;
+}
+
+bool up_pressed(float x, float y)
+{
+    if(x >= RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(120*M_PI/180.0))) &&
+       x <= RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(-120*M_PI/180.0))) &&
+       y >= UP_ARROW_CENTER_Y + (ARROW_ALTITUDE*(cos(120*M_PI/180.0))) &&
+       y <= UP_ARROW_CENTER_Y + ARROW_ALTITUDE)
+        return true;
+    return false;
+}
+
+bool down_pressed(float x, float y)
+{
+    if(x >= RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(120*M_PI/180.0))) &&
+       x <= RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(-120*M_PI/180.0))) &&
+       y <= DOWN_ARROW_CENTER_Y - (ARROW_ALTITUDE*(cos(120*M_PI/180.0))) &&
+       y >= DOWN_ARROW_CENTER_Y - ARROW_ALTITUDE)
+        return true;
+    return false;
+}
+
 void draw_menu_backgrounds()
 {
     glColor3f(MENU_BACKGROUND_RGB);

@@ -28,10 +28,13 @@ static void screen_to_gl(float & x, float & y);
 static void release_point();
 static void pickup_point(float x, float y);
 static void move_point(float x, float y);
+static void reset();
+static void increment_vertices();
+static void decrement_vertices();
 
 vector<point> initiator_points;
 static int acquired_point = -1;
-
+static int num_vertices = 4;
 
 void initInitiator( void )
 {
@@ -53,7 +56,8 @@ void initInitiator( void )
 
 static void init_default_fractal()
 {
-    //center at 250,250, equilateral triangle
+    //center at 250,250, equilateral triangl
+    initiator_points.clear();
     point p(250,335);
     initiator_points.push_back(p);
     p.x = 250 + (175*(-sin(120*M_PI/180.0)));
@@ -116,11 +120,20 @@ static void click( int button, int state, int x, int y )
         if(state == MouseButtonPress)
         {
             if(reset_pressed(float_x,float_y))
+            {
+                printf("Reset\n");
                 reset();
+            }
             else if(up_pressed(float_x,float_y))
+            {
+                printf("UP\n");
                 increment_vertices();
+            }
             else if(down_pressed(float_x,float_y))
+            {
+                printf("Down.\n");
                 decrement_vertices();
+            }
             else
                 pickup_point(float_x,float_y);
         }
@@ -132,9 +145,21 @@ static void click( int button, int state, int x, int y )
     }
 }
 
-bool reset_pressed(float x, float y)
+static void increment_vertices()
 {
-    if(x < 
+    num_vertices++;
+    glutPostRedisplay();
+}
+
+static void decrement_vertices()
+{
+    num_vertices--;
+    glutPostRedisplay();
+}
+static void reset()
+{
+    init_default_fractal();
+    glutPostRedisplay();
 }
 
 static void pickup_point(float x, float y)
@@ -182,8 +207,8 @@ static void move_point(float x, float y)
     
     if(y < BORDER_BUFFER)
         y = BORDER_BUFFER;
-    else if(y > TOTAL_HEIGHT - BORDER_BUFFER)
-        y = TOTAL_HEIGHT - BORDER_BUFFER;
+    else if(y > DRAW_WINDOW_HEIGHT - BORDER_BUFFER)
+        y = DRAW_WINDOW_HEIGHT - BORDER_BUFFER;
     
     initiator_points[acquired_point].x = x;
     initiator_points[acquired_point].y = y;
