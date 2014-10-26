@@ -1,11 +1,11 @@
 #include "shared_constants.h"
 #include "common_functions.h"
-#include "generator.h"
+#include "fractal_display.h"
 
 //all the static functions and variables are declared here to restrict scope to this file
 
-static int ScreenWidth = 0.5*(TOTAL_WIDTH);
-static int ScreenHeight = 0.5*(TOTAL_HEIGHT);
+static int ScreenWidth = TOTAL_WIDTH;
+static int ScreenHeight = TOTAL_HEIGHT;
 
 static void display( void );
 static void click( int button, int state, int x, int y);
