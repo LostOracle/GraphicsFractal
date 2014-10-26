@@ -80,7 +80,6 @@ void draw_up_down_arrows()
         y = DOWN_ARROW_CENTER_Y - (ARROW_ALTITUDE*(cos(-120*M_PI/180.0)));
         glVertex2f(x,y);
     glEnd();
-
 }
 
 void draw_go_button()
@@ -171,6 +170,16 @@ void draw_reset_button()
     glScalef(0.15,0.15,1);
     glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Reset");
     glPopMatrix();
+}
+
+bool go_pressed(float x, float y)
+{
+    if(x >= RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0 &&
+       x <= RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0 &&
+       y >= RIGHT_MENU_SPACE &&
+       y <= RIGHT_MENU_SPACE + TEXT_AREA_HEIGHT )
+        return true;
+    return false;
 }
 
 bool reset_pressed(float x, float y)

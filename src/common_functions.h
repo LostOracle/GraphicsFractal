@@ -10,6 +10,7 @@ void draw_border();
 void draw_text_area();
 void draw_big_point(float x, float y);
 bool reset_pressed(float x, float y);
+bool go_pressed(float x, float y);
 bool up_pressed(float x, float y);
 bool down_pressed(float x, float y);
 

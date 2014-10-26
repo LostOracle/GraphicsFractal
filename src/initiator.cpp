@@ -168,6 +168,7 @@ static void increment_vertices()
     if(num_vertices <= 2)
         return;
     num_vertices++;
+    
     glutPostRedisplay();
 }
 
