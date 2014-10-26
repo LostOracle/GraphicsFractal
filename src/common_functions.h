@@ -1,8 +1,9 @@
 #ifndef _COMMON_FUNCTIONS_H_
 #define _COMMON_FUNCTIONS_H_
 
-void draw_menu();
-void draw_buttons();
+void draw_up_down_arrows();
+void draw_reset_button();
+void draw_go_button();
 void draw_border();
 void draw_text_areas();
 void draw_text();

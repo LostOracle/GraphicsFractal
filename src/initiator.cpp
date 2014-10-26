@@ -56,7 +56,8 @@ void initInitiator( void )
 
 static void init_default_fractal()
 {
-    //center at 250,250, equilateral triangl
+    //center at 250,250, equilateral triangle
+    num_vertices = 4;
     initiator_points.clear();
     point p(250,335);
     initiator_points.push_back(p);
@@ -71,10 +72,27 @@ static void init_default_fractal()
     initiator_points.push_back(p);
 }
 
+static void draw_text()
+{
+    //Displays the Player 1 string to the screen
+    glColor3f(0,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - VERTICES_HORIZONTAL_OFFSET ,RIGHT_MENU_CENTER_Y + VERTICES_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
+    glPopMatrix();
+    
+}
+
 static void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT );
-    draw_menu();
+    draw_menu_backgrounds();
+    draw_up_down_arrows();
+    draw_reset_button();
+    draw_text_area();
+    draw_text();
     draw_border();
     draw_initiator();
     glFlush();
@@ -147,12 +165,16 @@ static void click( int button, int state, int x, int y )
 
 static void increment_vertices()
 {
+    if(num_vertices <= 2)
+        return;
     num_vertices++;
     glutPostRedisplay();
 }
 
 static void decrement_vertices()
 {
+    if(num_vertices >= 10)
+        return;
     num_vertices--;
     glutPostRedisplay();
 }

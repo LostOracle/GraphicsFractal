@@ -18,7 +18,7 @@ void draw_big_point(float x, float y)
     glLoadIdentity();
 }
 
-void draw_buttons()
+void draw_up_down_arrows()
 {
     float x,y;
     //Draw Increment Arrow
@@ -81,6 +81,54 @@ void draw_buttons()
         glVertex2f(x,y);
     glEnd();
 
+}
+
+void draw_go_button()
+{
+    //Reset Button
+    glColor3f(GO_RGB);
+    glBegin(GL_POLYGON);
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        y = RIGHT_MENU_SPACE + TEXT_AREA_HEIGHT;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+
+        y = RIGHT_MENU_SPACE;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+    glEnd();
+    glColor3f(GO_OUTLINE_RGB);
+    glBegin(GL_LINE_LOOP);
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        y = RIGHT_MENU_SPACE + TEXT_AREA_HEIGHT;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+
+        y = RIGHT_MENU_SPACE;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+    glEnd();
+    
+    //Display the Go button text
+    glColor3f(0,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - GO_HORIZONTAL_OFFSET ,RIGHT_MENU_SPACE + GO_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Go");
+    glPopMatrix();
+}
+
+void draw_reset_button()
+{
     //Reset Button
     glColor3f(RESET_RGB);
     glBegin(GL_POLYGON);
@@ -112,6 +160,15 @@ void draw_buttons()
         x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
         glVertex2f(x,y);
     glEnd();
+    
+    //Display the Reset button text
+    glColor3f(0,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - RESET_HORIZONTAL_OFFSET ,RIGHT_MENU_SPACE + RESET_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Reset");
+    glPopMatrix();
 }
 
 bool reset_pressed(float x, float y)
@@ -197,38 +254,6 @@ void draw_text_areas()
         x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
         glVertex2f(x,y);
     glEnd();
-}
-void draw_text()
-{
-    //Displays the Player 1 string to the screen
-    glColor3f(0,0,0);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glTranslatef(RIGHT_MENU_CENTER_X - VERTICES_HORIZONTAL_OFFSET ,RIGHT_MENU_CENTER_Y + VERTICES_VERTICAL_OFFSET,0);
-    glScalef(0.15,0.15,1);
-    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
-    glPopMatrix();
-    
-    //Displays the Player 1 string to the screen
-    glColor3f(0,0,0);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glTranslatef(RIGHT_MENU_CENTER_X - RESET_HORIZONTAL_OFFSET ,RIGHT_MENU_SPACE + RESET_VERTICAL_OFFSET,0);
-    glScalef(0.15,0.15,1);
-    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Reset");
-    glPopMatrix();
-}
-void draw_menu()
-{
-    draw_menu_backgrounds();
-    draw_buttons();
-    draw_text_areas();
-    draw_text();
-    glColor3f(1,0,0);
-    glBegin(GL_POINTS);
-        glVertex2f(RIGHT_MENU_CENTER_X, RIGHT_MENU_CENTER_Y);
-    glEnd();
-    
 }
 
 void draw_border()
