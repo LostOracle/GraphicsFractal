@@ -12,11 +12,12 @@ static void click( int button, int state, int x, int y);
 static void drag( int x, int y );
 static void reshape( int w, int h );
 static void draw_fractal_display();
+static void draw_all_fractals();
 static void screen_to_gl(float & x, float & y);
 
-vector<point> fractal_points;
-static int acquired_point = -1;
-
+vector< vector<point> > fractal_iterations;
+static int number_of_iterations = 1;
+static bool draw_previous = false;
 
 void initFractalDisplay( void )
 {
@@ -30,7 +31,7 @@ void initFractalDisplay( void )
     glutDisplayFunc( display );             // how to redisplay window
     glutReshapeFunc( reshape );             // how to resize window
     glutMouseFunc( click );
-
+    fractal_iterations.pop_back( initiator_points );
     //set up default fractal initiator
 }
 
@@ -39,14 +40,35 @@ static void display( void )
     glClear( GL_COLOR_BUFFER_BIT );
     draw_menu();
     draw_border();
-    draw_fractal_display();
+    if( !draw_previous )
+        draw_fractal_display();
+    else
+        draw_all_fractals();
     glFlush();
     glutSwapBuffers();
 }
 
 static void draw_fractal_display()
 {
+    glColor3f(1,1,1);
+    glBegin(GL_LINE_STRIP);
+    for( int i = 0; i < fractal_iterations[number_of_iterations -1].size(); i++)
+    {
+        glVertex2f( fractal_iterations[number_of_iterations - 1][i].x, fractal_iterations[number_of_iterations - 1][i].y );
+    }
+    glEnd();
+}
 
+draw_all_fractals()
+{
+    glColor3f(1,1,1);
+    glBegin(GL_LINE_STRIP);
+    for( int i = 0; i < number_of_iterations; i++)
+    {
+        for( int j = 0; j < fractal_iterations[i].size(); j++ )
+            glVertex2f( fractal_iterations[i][j].x, fractal_iterations[i][j].y );
+    }
+    glEnd();
 }
 
 
