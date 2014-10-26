@@ -85,6 +85,7 @@ void draw_up_down_arrows()
 
 void draw_go_button()
 {
+    float x,y;
     //Reset Button
     glColor3f(GO_RGB);
     glBegin(GL_POLYGON);
@@ -129,6 +130,7 @@ void draw_go_button()
 
 void draw_reset_button()
 {
+    float x,y;
     //Reset Button
     glColor3f(RESET_RGB);
     glBegin(GL_POLYGON);
@@ -220,7 +222,7 @@ void draw_menu_backgrounds()
         glVertex2f( 0, TOTAL_HEIGHT - TOP_MENU_HEIGHT );
     glEnd();
 }
-void draw_text_areas()
+void draw_text_area()
 {
     glColor3f(TEXT_AREA_RGB);
     float x, y;

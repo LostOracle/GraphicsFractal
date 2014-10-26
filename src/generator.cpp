@@ -24,6 +24,7 @@ static void reshape( int w, int h );
 static void init_default_fractal();
 static void draw_generator();
 static void screen_to_gl(float & x, float & y);
+static void draw_text();
 static void release_point();
 static void pickup_point(float x, float y);
 static void move_point(float x, float y);
@@ -74,7 +75,11 @@ static void init_default_fractal()
 static void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT );
-    draw_menu();
+    draw_menu_backgrounds();
+    draw_up_down_arrows();
+    draw_reset_button();
+    draw_text_area();
+    draw_text();
     draw_border();
     draw_generator();
     glFlush();
@@ -90,6 +95,19 @@ static void draw_generator()
     glEnd();
     for(unsigned int i = 0; i < generator_points.size(); i++)
         draw_big_point(generator_points[i].x,generator_points[i].y);
+}
+
+static void draw_text()
+{
+    //Displays the Player 1 string to the screen
+    glColor3f(0,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - VERTICES_HORIZONTAL_OFFSET ,RIGHT_MENU_CENTER_Y + VERTICES_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
+    glPopMatrix();
+    
 }
 
 
