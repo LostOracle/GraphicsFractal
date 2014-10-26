@@ -14,11 +14,16 @@ static void reshape( int w, int h );
 static void draw_fractal_display();
 static void draw_all_fractals();
 static void screen_to_gl(float & x, float & y);
+static void increment_iterations();
+static void decrement_iterations();
+static void draw_previous_toggle();
+static void reset();
+static void recalculate_fractal();
 
 vector< vector<point> > fractal_iterations;
 static int number_of_iterations = 1;
 static bool draw_previous = false;
-
+static float draw_toggle = { .7,0,0};
 void initFractalDisplay( void )
 {
     glutCreateWindow( "Fractal Display" );          // window title
@@ -98,11 +103,59 @@ static void click( int button, int state, int x, int y )
     {
         if(state == MouseButtonPress)
         {
+            if(up_pressed(float_x,float_y))
+            {
+                printf("UP\n");
+                increment_iterations();
+            }
+            else if(down_pressed(float_x,float_y))
+            {
+                printf("Down.\n");
+                decrement_iterations();
+            }
+            else if( go_pressed(float_x, float_y) )
+            {    
+                printf("Go.\n");
+                recalculate_fractal();
+            }
+            else if( display_all_pressed(float_x, float_y))
+            {
+                printf("Toggle Display. \n");
+                draw_previous_toggle();
+            } 
         }
         else if(state == MouseButtonRelease)
         {
+            //release point
+            release_point();
         }
     }
+
+}
+
+static void draw_previous_toggle()
+{
+    draw_previous = !draw_previous;
+    if(!draw_previous)
+        draw_toggle = {.7,0,0};
+    else
+        draw_toggle = {0,.7,0};
+}
+
+static void increment_iterations()
+{
+    if( number_of_iterations == 6)
+        return;
+    num_vertices++;
+    glutPostRedisplay();
+}
+
+static void decrement_iterations()
+{
+    if(number_of_iterations == 1)
+        return;
+    num_vertices--;
+    glutPostRedisplay();
 }
 
 static void screen_to_gl(float & x, float & y)
