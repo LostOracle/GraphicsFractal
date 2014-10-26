@@ -59,7 +59,7 @@ void initGenerator( void )
 static void init_default_fractal()
 {
     //center at 250,250, equilateral triangle
-
+    generator_points.clear();
     point p(BORDER_BUFFER,DRAW_WINDOW_HEIGHT/2.0);
     generator_points.push_back(p);
     p.x = BORDER_BUFFER + 1/3.0*(DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER);
@@ -105,7 +105,6 @@ static void draw_generator()
 static void new_generator()
 {
     point p(0,DRAW_WINDOW_HEIGHT/2.0);
-    float x,y;
     float delta = (DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER)/(num_vertices-1);
     generator_points.clear();
     for(float x = BORDER_BUFFER; x <= DRAW_WINDOW_WIDTH - BORDER_BUFFER; x += delta)
@@ -197,7 +196,7 @@ static void increment_vertices()
 
 static void decrement_vertices()
 {
-    if(num_vertices <= 2)
+    if(num_vertices <= 3)
         return;
     num_vertices--;
     new_generator();

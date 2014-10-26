@@ -185,7 +185,6 @@ static void decrement_vertices()
 static void new_initiator()
 {
     point p(0,DRAW_WINDOW_HEIGHT/2.0);
-    float x,y;
     float delta = (DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER)/(num_vertices-1);
     initiator_points.clear();
     for(float x = BORDER_BUFFER; x <= DRAW_WINDOW_WIDTH - BORDER_BUFFER; x += delta)
