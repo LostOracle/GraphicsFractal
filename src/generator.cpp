@@ -28,9 +28,14 @@ static void draw_text();
 static void release_point();
 static void pickup_point(float x, float y);
 static void move_point(float x, float y);
+static void new_generator();
+static void reset();
+static void increment_vertices();
+static void decrement_vertices();
 
 vector<point> generator_points;
 static int acquired_point = -1;
+int num_vertices = 5;
 
 
 void initGenerator( void )
@@ -97,6 +102,19 @@ static void draw_generator()
         draw_big_point(generator_points[i].x,generator_points[i].y);
 }
 
+static void new_generator()
+{
+    point p(0,DRAW_WINDOW_HEIGHT/2.0);
+    float x,y;
+    float delta = (DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER)/(num_vertices-1);
+    generator_points.clear();
+    for(float x = BORDER_BUFFER; x <= DRAW_WINDOW_WIDTH - BORDER_BUFFER; x += delta)
+    {
+        p.x = x;
+        generator_points.push_back(p);
+    }
+}
+
 static void draw_text()
 {
     //Displays the Player 1 string to the screen
@@ -107,7 +125,6 @@ static void draw_text()
     glScalef(0.15,0.15,1);
     glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
     glPopMatrix();
-    
 }
 
 
@@ -137,8 +154,23 @@ static void click( int button, int state, int x, int y )
     {
         if(state == MouseButtonPress)
         {
-            //pickup point
-            pickup_point(float_x,float_y);
+            if(reset_pressed(float_x,float_y))
+            {
+                printf("Reset\n");
+                reset();
+            }
+            else if(up_pressed(float_x,float_y))
+            {
+                printf("UP\n");
+                increment_vertices();
+            }
+            else if(down_pressed(float_x,float_y))
+            {
+                printf("Down.\n");
+                decrement_vertices();
+            }
+            else
+                pickup_point(float_x,float_y);
         }
         else if(state == MouseButtonRelease)
         {
@@ -146,6 +178,30 @@ static void click( int button, int state, int x, int y )
             release_point();
         }
     }
+}
+
+static void reset()
+{
+    init_default_fractal();
+    glutPostRedisplay();
+}
+
+static void increment_vertices()
+{
+    if(num_vertices >= 10)
+        return;
+    num_vertices++;
+    new_generator(); 
+    glutPostRedisplay();
+}
+
+static void decrement_vertices()
+{
+    if(num_vertices <= 2)
+        return;
+    num_vertices--;
+    new_generator();
+    glutPostRedisplay();
 }
 
 static void pickup_point(float x, float y)

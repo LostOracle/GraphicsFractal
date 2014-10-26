@@ -31,6 +31,7 @@ static void move_point(float x, float y);
 static void reset();
 static void increment_vertices();
 static void decrement_vertices();
+static void new_initiator();
 
 vector<point> initiator_points;
 static int acquired_point = -1;
@@ -165,20 +166,35 @@ static void click( int button, int state, int x, int y )
 
 static void increment_vertices()
 {
-    if(num_vertices <= 2)
+    if(num_vertices >= 10)
         return;
     num_vertices++;
-    
+    new_initiator(); 
     glutPostRedisplay();
 }
 
 static void decrement_vertices()
 {
-    if(num_vertices >= 10)
+    if(num_vertices <= 2)
         return;
     num_vertices--;
+    new_initiator();
     glutPostRedisplay();
 }
+
+static void new_initiator()
+{
+    point p(0,DRAW_WINDOW_HEIGHT/2.0);
+    float x,y;
+    float delta = (DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER)/(num_vertices-1);
+    initiator_points.clear();
+    for(float x = BORDER_BUFFER; x <= DRAW_WINDOW_WIDTH - BORDER_BUFFER; x += delta)
+    {
+        p.x = x;
+        initiator_points.push_back(p);
+    }
+}
+
 static void reset()
 {
     init_default_fractal();
