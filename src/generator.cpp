@@ -170,13 +170,13 @@ static void move_point(float x, float y)
 {
     if(x < BORDER_BUFFER)
         x = BORDER_BUFFER;
-    else if(x > DRAW_WINDOW_WIDTH - BORDER_BUFFER)
+    else if( x > DRAW_WINDOW_WIDTH - BORDER_BUFFER )
         x = DRAW_WINDOW_WIDTH - BORDER_BUFFER;
     
-    if(y < BORDER_BUFFER)
+    if( y < BORDER_BUFFER )
         y = BORDER_BUFFER;
-    else if(y > TOTAL_HEIGHT - BORDER_BUFFER)
-        y = TOTAL_HEIGHT - BORDER_BUFFER;
+    else if( y > DRAW_WINDOW_HEIGHT - BORDER_BUFFER )
+        y = DRAW_WINDOW_HEIGHT - BORDER_BUFFER;
     
     generator_points[acquired_point].x = x;
     generator_points[acquired_point].y = y;
