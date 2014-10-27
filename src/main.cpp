@@ -4,6 +4,7 @@
 #include "../include/common_functions.h"
 #include "../include/initiator_init.h"
 #include "../include/generator_init.h"
+#include "../include/fractal_init.h"
 using namespace std;
 void glInit();
 
@@ -26,4 +27,5 @@ void glInit()
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE );
     initInitiator();
     initGenerator();
+    initFractalDisplay();
 }

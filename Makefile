@@ -36,7 +36,7 @@ VPATH = src
 all:    fractal
 
 # specific targets
-fractal:	generator.o initiator.o common_functions.o main.o
+fractal:	generator.o initiator.o common_functions.o main.o fractal_display.o
 	$(LINK) -o $@ $^ $(GL_LIBS)
 
 # generic C and C++ targets for OpenGL programs consisting of only one file

@@ -267,19 +267,19 @@ static void move_point(float x, float y)
 
 static void screen_to_gl(float & x, float & y)
 {
-    if(ScreenWidth == ScreenHeight)
+    if(ScreenWidth == ScreenHeight*ASPECT_RATIO)
     {
         x = (float)x / ScreenWidth * TOTAL_WIDTH;
         y = (float)y / ScreenHeight * TOTAL_HEIGHT;
     }
-    else if(ScreenWidth > ScreenHeight)
+    else if(ScreenWidth > ScreenHeight*ASPECT_RATIO)
     {
-        x = (float)x / ScreenHeight * TOTAL_WIDTH;
+        x = (float)x / (ScreenHeight*ASPECT_RATIO) * TOTAL_WIDTH;
         y = (float)y / ScreenHeight * TOTAL_HEIGHT;
     }
     else
     {   
         x = (float)x / ScreenWidth * TOTAL_WIDTH;
-        y = (float)y / ScreenWidth * TOTAL_HEIGHT;
+        y = (float)y / (ScreenWidth/ASPECT_RATIO) * TOTAL_HEIGHT;
     }
 }
