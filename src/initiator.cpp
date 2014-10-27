@@ -2,15 +2,16 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <vector>
 #include <math.h>
 using namespace std;
 
 // use OpenGL graphics and the GLUT graphical user interface
 #include <GL/freeglut.h>
-#include "shared_constants.h"
-#include "common_functions.h"
-#include "initiator.h"
+#include "../include/shared_constants.h"
+#include "../include/common_functions.h"
+#include "../include/initiator.h"
 
 //all the static functions and variables are declared here to restrict scope to this file
 
@@ -75,7 +76,7 @@ static void init_default_fractal()
 
 static void draw_text()
 {
-    //Displays the Player 1 string to the screen
+    char temp_str[10];
     glColor3f(0,0,0);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -83,7 +84,14 @@ static void draw_text()
     glScalef(0.15,0.15,1);
     glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
     glPopMatrix();
-    
+ 
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - VERTICE_NUM_HORIZONTAL_OFFSET, RIGHT_MENU_CENTER_Y - VERTICE_NUM_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    sprintf(temp_str,"%02d",num_vertices);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)temp_str);
+    glPopMatrix();
 }
 
 static void display( void )
@@ -140,17 +148,14 @@ static void click( int button, int state, int x, int y )
         {
             if(reset_pressed(float_x,float_y))
             {
-                printf("Reset\n");
                 reset();
             }
             else if(up_pressed(float_x,float_y))
             {
-                printf("UP\n");
                 increment_vertices();
             }
             else if(down_pressed(float_x,float_y))
             {
-                printf("Down.\n");
                 decrement_vertices();
             }
             else
@@ -232,8 +237,6 @@ static void drag( int x, int y )
     screen_to_gl(float_x,float_y);
     if(acquired_point != -1)
         move_point(float_x, float_y);
-    //convert screen coordinates into GL coordinates
-    printf("Mouse dragged to (%f,%f)\n",float_x,float_y);
 }
 
 static void move_point(float x, float y)

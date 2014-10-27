@@ -1,7 +1,7 @@
 #include <GL/freeglut.h>
 #include <math.h>
-#include "shared_constants.h"
-#include "common_functions.h"
+#include "../include/shared_constants.h"
+#include "../include/common_functions.h"
 
 
 void draw_big_point(float x, float y)

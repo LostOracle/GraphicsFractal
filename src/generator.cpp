@@ -8,9 +8,9 @@ using namespace std;
 
 // use OpenGL graphics and the GLUT graphical user interface
 #include <GL/freeglut.h>
-#include "shared_constants.h"
-#include "common_functions.h"
-#include "generator.h"
+#include "../include/shared_constants.h"
+#include "../include/common_functions.h"
+#include "../include/generator.h"
 
 //all the static functions and variables are declared here to restrict scope to this file
 
@@ -116,6 +116,7 @@ static void new_generator()
 
 static void draw_text()
 {
+    char temp_str[10];
     //Displays the Player 1 string to the screen
     glColor3f(0,0,0);
     glMatrixMode(GL_MODELVIEW);
@@ -123,6 +124,14 @@ static void draw_text()
     glTranslatef(RIGHT_MENU_CENTER_X - VERTICES_HORIZONTAL_OFFSET ,RIGHT_MENU_CENTER_Y + VERTICES_VERTICAL_OFFSET,0);
     glScalef(0.15,0.15,1);
     glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
+    glPopMatrix();
+    
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - VERTICE_NUM_HORIZONTAL_OFFSET, RIGHT_MENU_CENTER_Y - VERTICE_NUM_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    sprintf(temp_str,"%02d",num_vertices);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)temp_str);
     glPopMatrix();
 }
 

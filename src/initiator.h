@@ -1,1 +1,0 @@
-void initInitiator( void );

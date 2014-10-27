@@ -1,9 +1,9 @@
 #include <GL/freeglut.h>
 #include <vector>
-#include "shared_constants.h"
-#include "common_functions.h"
-#include "initiator.h"
-#include "generator.h"
+#include "../include/shared_constants.h"
+#include "../include/common_functions.h"
+#include "../include/initiator.h"
+#include "../include/generator.h"
 using namespace std;
 void glInit();
 
