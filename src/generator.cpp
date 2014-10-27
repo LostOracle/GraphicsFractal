@@ -10,7 +10,7 @@ using namespace std;
 #include <GL/freeglut.h>
 #include "../include/shared_constants.h"
 #include "../include/common_functions.h"
-#include "../include/generator.h"
+#include "../include/generator_init.h"
 
 //all the static functions and variables are declared here to restrict scope to this file
 
@@ -40,9 +40,9 @@ int num_vertices = 5;
 
 void initGenerator( void )
 {
-    glutCreateWindow( "Generator" );          // window title
     glutInitWindowSize( ScreenWidth, ScreenHeight );    // initial window size
-    glutInitWindowPosition( ScreenWidth, 0 );          // initial window position
+    glutInitWindowPosition( 0, ScreenHeight + TITLE_BAR_VERTICAL_SIZE );          // initial window position
+    glutCreateWindow( "Generator" );          // window title
 
     glClearColor( 0.0, 0.0, 0.0, 1.0 );         // use black for glClear command
 
@@ -145,10 +145,10 @@ static void reshape( int w, int h )
     // how to project 3-D scene onto 2-D
     glMatrixMode( GL_PROJECTION );      // use an orthographic projection
     glLoadIdentity();                   // initialize transformation matrix
-    if ( w > h )                        // use width:height aspect ratio to specify view extents
-        gluOrtho2D( 0, TOTAL_WIDTH * w / h, 0 , TOTAL_HEIGHT );
+    if ( w > (h*ASPECT_RATIO) )                        // use width:height aspect ratio to specify view extents
+        gluOrtho2D( 0, TOTAL_WIDTH * w / (h*ASPECT_RATIO), 0 , TOTAL_HEIGHT );
     else
-        gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * h / w );
+        gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * (h*ASPECT_RATIO) / w );
     glViewport( 0, 0, w, h );           // adjust viewport to new window
 }
 

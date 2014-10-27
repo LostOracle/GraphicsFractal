@@ -1,3 +1,9 @@
+/******************************************************************************
+ * File: common_functions.h
+ * Authors: Ian Carlson, Christopher Smith
+ * Description: This file contains the function definitions for the common drawing
+ *  and click handling functions between all three windows.
+ *****************************************************************************/
 #ifndef _COMMON_FUNCTIONS_H_
 #define _COMMON_FUNCTIONS_H_
 

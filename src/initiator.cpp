@@ -11,7 +11,7 @@ using namespace std;
 #include <GL/freeglut.h>
 #include "../include/shared_constants.h"
 #include "../include/common_functions.h"
-#include "../include/initiator.h"
+#include "../include/initiator_init.h"
 
 //all the static functions and variables are declared here to restrict scope to this file
 
@@ -40,9 +40,9 @@ static int num_vertices = 4;
 
 void initInitiator( void )
 {
-    glutCreateWindow( "Initiator" );          // window title
     glutInitWindowSize( ScreenWidth, ScreenHeight );    // initial window size
-    glutInitWindowPosition( 50, 50 );          // initial window position
+    glutInitWindowPosition( 0, 0 );          // initial window position
+    glutCreateWindow( "Initiator" );          // window title
 
     glClearColor( 0.0, 0.0, 0.0, 1.0 );         // use black for glClear command
 
@@ -126,13 +126,14 @@ static void reshape( int w, int h )
     ScreenWidth = w;
     ScreenHeight = h;
 
+
     // how to project 3-D scene onto 2-D
     glMatrixMode( GL_PROJECTION );      // use an orthographic projection
     glLoadIdentity();                   // initialize transformation matrix
-    if ( w > h )                        // use width:height aspect ratio to specify view extents
-        gluOrtho2D( 0, TOTAL_WIDTH * w / h, 0 , TOTAL_HEIGHT );
+    if ( w > (h*ASPECT_RATIO) )                        // use width:height aspect ratio to specify view extents
+        gluOrtho2D( 0, TOTAL_WIDTH * w / (h*ASPECT_RATIO), 0 , TOTAL_HEIGHT );
     else
-        gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * h / w );
+        gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * (h*ASPECT_RATIO)/w );
     glViewport( 0, 0, w, h );           // adjust viewport to new window
 }
 
@@ -258,19 +259,19 @@ static void move_point(float x, float y)
 
 static void screen_to_gl(float & x, float & y)
 {
-    if(ScreenWidth == ScreenHeight)
+    if(ScreenWidth == ScreenHeight*ASPECT_RATIO)
     {
         x = (float)x / ScreenWidth * TOTAL_WIDTH;
         y = (float)y / ScreenHeight * TOTAL_HEIGHT;
     }
-    else if(ScreenWidth > ScreenHeight)
+    else if(ScreenWidth > ScreenHeight*ASPECT_RATIO)
     {
-        x = (float)x / ScreenHeight * TOTAL_WIDTH;
+        x = (float)x / (ScreenHeight*ASPECT_RATIO) * TOTAL_WIDTH;
         y = (float)y / ScreenHeight * TOTAL_HEIGHT;
     }
     else
     {   
         x = (float)x / ScreenWidth * TOTAL_WIDTH;
-        y = (float)y / ScreenWidth * TOTAL_HEIGHT;
+        y = (float)y / (ScreenWidth/ASPECT_RATIO) * TOTAL_HEIGHT;
     }
 }
