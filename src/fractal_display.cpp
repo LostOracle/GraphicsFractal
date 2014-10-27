@@ -147,6 +147,7 @@ static void increment_iterations()
     if( number_of_iterations == 6)
         return;
     num_vertices++;
+    recalculate_fractal();
     glutPostRedisplay();
 }
 
@@ -156,6 +157,50 @@ static void decrement_iterations()
         return;
     num_vertices--;
     glutPostRedisplay();
+}
+
+void recalculate_fractal( void )
+{
+    fractal_iterations.clear();
+    fractal_iterations.push_back( initiator_points );
+    for( int i = 1; i < number_of_iterations; i++ )
+    {
+        vector<point> temp_iteration;
+        for( int j = 0; j < (fractal_iterations[i-1].size()) - 1; j++)
+        {
+            point end_point(fractal_iterations[i-1][j+1]);
+            point start_point(fractal_iterations[i-1][j]);
+            vector<point> tmp = generator_points;
+
+            point first_point(tmp[0].x, tmp[0].y);
+            for(int k = 0; k < tmp.size(); k++ )
+            {
+                tmp[k].x = tmp[k].x - first_point.x;
+                tmp[k].y = tmp[k].y - first_piont.y;
+            }
+
+            float theta = atan2(end_point.y - start_point.y, end_point.x - start_point.x);
+
+            float tmp_distance = tmp[tmp.size()-1].x*tmp[tmp.size()-1].x + tmp[tmp.size()-1].y*tmp[tmp.size()-1].y;
+
+            tmp_distance = sqrt(tmp_distance);
+
+            float scale =(start_point.x - end_point.x ) * (start_point.x - end_point.x);
+            scale += (start_point.y - end_point.y ) * (start_point.y - end_point.y);
+            scale = sqrt(scale)/tmp_distance;
+
+            for( int l = 0; l < tmp.size()-1; l++)
+            {
+                tmp[l].x = (tmp[l].x * cos(theta) - tmp[l].y * sin(theta) ) * scale + start_point.x;
+                tmp[l].y = (tmp[l].x * sin(theta) + tmp[l].y * cos(theta) ) * scale + start_point.y;
+                temp_iteration.push_back(tmp[l]);
+            }
+            tmp.clear(); 
+        }
+        temp_iteration.push_back(fractal_iterations[i-1][ fractal_iterations[i-1].size()-1 ]);
+        fractal_iterations.push_back(temp_iteration);
+        temp_iteration.clear();
+    }
 }
 
 static void screen_to_gl(float & x, float & y)
