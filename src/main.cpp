@@ -2,8 +2,8 @@
 #include <vector>
 #include "../include/shared_constants.h"
 #include "../include/common_functions.h"
-#include "../include/initiator.h"
-#include "../include/generator.h"
+#include "../include/initiator_init.h"
+#include "../include/generator_init.h"
 using namespace std;
 void glInit();
 

@@ -1,6 +1,6 @@
 #include "../include/shared_constants.h"
 #include "../include/common_functions.h"
-#include "../include/fractal_display.h"
+#include "../include/fractal_init.h"
 
 //all the static functions and variables are declared here to restrict scope to this file
 
