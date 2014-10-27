@@ -75,6 +75,7 @@ const int MouseRightButton	= 2; //unused
 struct point
 {
     point(float x1, float y1): x(x1), y(y1) {};
+    point(point p):x(p.x),y(p.y){};
     float x;
     float y;
 };
