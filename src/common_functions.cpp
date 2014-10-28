@@ -1,9 +1,28 @@
+/*****************************************************************************
+ * File: common_functions.cpp
+ * Authors: Ian Carlson, Christopher Smith
+ * Description: This file contains functions needed by the initiator,
+ *  generator, and display_fractal windows.
+ *  **************************************************************************/
+
 #include <GL/freeglut.h>
 #include <math.h>
 #include "../include/shared_constants.h"
 #include "../include/common_functions.h"
 
-
+/******************************************************************************
+ * Function: draw_big_point
+ * Parameters:
+ *  x - x coordinate in GL coordinates at which to draw the point
+ *  y - y coordinate in GL coordinates at which to draw the point
+ * Returns: none
+ * Description: This function draws a large point at the specified x y location.
+ *  The color of the point is dependant on a call to glColorxx before the
+ *  function call.
+ *
+ *  This function was pretty much shamelessly stolen from Dr. Weiss's 
+ *  OpenGLDemo code.
+ *****************************************************************************/
 void draw_big_point(float x, float y)
 {
     float radius = 5;
@@ -17,34 +36,51 @@ void draw_big_point(float x, float y)
     glLoadIdentity();
 }
 
+/******************************************************************************
+ * Function: draw_up_down_arrows
+ * Parameters: none
+ * Returns: none
+ * Description: This function draws the up and down arrows on the window. This
+ *  function relies on the #defined constants in shared_constants.h to know
+ *  where to draw the arrows and the colors to use.
+ *****************************************************************************/
 void draw_up_down_arrows()
 {
     float x,y;
+ 
     //Draw Increment Arrow
     glColor3fv(UP_DOWN_BUTTON_COLOR);
     glBegin(GL_POLYGON);
+        //Top vertex
         x = RIGHT_MENU_CENTER_X;
         y = UP_ARROW_CENTER_Y + ARROW_ALTITUDE;
         glVertex2f(x,y);
         
+        //Bottom Left Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(120*M_PI/180.0)));
         y = UP_ARROW_CENTER_Y + (ARROW_ALTITUDE*(cos(120*M_PI/180.0)));
         glVertex2f(x,y);
         
+        //Bottom Right Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(-120*M_PI/180.0)));
         y = UP_ARROW_CENTER_Y + (ARROW_ALTITUDE*(cos(-120*M_PI/180.0)));
         glVertex2f(x,y);
     glEnd();
+
+    //Draw Increment Arrow Border
     glColor3fv(BORDER_COLOR);
     glBegin(GL_LINE_LOOP);
+        //Top Vertex
         x = RIGHT_MENU_CENTER_X;
         y = UP_ARROW_CENTER_Y + ARROW_ALTITUDE;
         glVertex2f(x,y);
         
+        //Bottom Left Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(120*M_PI/180.0)));
         y = UP_ARROW_CENTER_Y + (ARROW_ALTITUDE*(cos(120*M_PI/180.0)));
         glVertex2f(x,y);
         
+        //Bottom Right Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(-120*M_PI/180.0)));
         y = UP_ARROW_CENTER_Y + (ARROW_ALTITUDE*(cos(-120*M_PI/180.0)));
         glVertex2f(x,y);
@@ -53,34 +89,48 @@ void draw_up_down_arrows()
     //Draw Decrement Arrow
     glColor3fv(UP_DOWN_BUTTON_COLOR);
     glBegin(GL_POLYGON);
+        //Bottom Vertex
         x = RIGHT_MENU_CENTER_X;
         y = DOWN_ARROW_CENTER_Y - ARROW_ALTITUDE;
         glVertex2f(x,y);
         
+        //Top Right Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(120*M_PI/180.0)));
         y = DOWN_ARROW_CENTER_Y - (ARROW_ALTITUDE*(cos(120*M_PI/180.0)));
         glVertex2f(x,y);
         
+        //Top Left Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(-120*M_PI/180.0)));
         y = DOWN_ARROW_CENTER_Y - (ARROW_ALTITUDE*(cos(-120*M_PI/180.0)));
         glVertex2f(x,y);
     glEnd();
+
+    //Draw Decrement Arrow Border
     glColor3fv(BORDER_COLOR);
     glBegin(GL_LINE_LOOP);
+        //Bottom Vertex
         x = RIGHT_MENU_CENTER_X;
         y = DOWN_ARROW_CENTER_Y - ARROW_ALTITUDE;
         glVertex2f(x,y);
         
+        //Top Right Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(120*M_PI/180.0)));
         y = DOWN_ARROW_CENTER_Y - (ARROW_ALTITUDE*(cos(120*M_PI/180.0)));
         glVertex2f(x,y);
         
+        //Top Left Vertex
         x = RIGHT_MENU_CENTER_X + (ARROW_ALTITUDE*(-sin(-120*M_PI/180.0)));
         y = DOWN_ARROW_CENTER_Y - (ARROW_ALTITUDE*(cos(-120*M_PI/180.0)));
         glVertex2f(x,y);
     glEnd();
 }
 
+/******************************************************************************
+ * Function draw_go_button
+ * Parameters: none
+ * Returns: none
+ * Description: This
+ * */
 void draw_go_button()
 {
     float x,y;

@@ -2,7 +2,7 @@
  * File: shared_constants.h
  * Authors: Ian Carlson, Christopher Smith
  * Description: This file puts all of the tweakable values used to size the
- *  display and menu for all the windows in one tidy file. A single change here
+ *  display and menu for all the windows in one file. A single change here
  *  will affect all of the windows.
  *****************************************************************************/
 
