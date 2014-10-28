@@ -2,6 +2,7 @@
 #include "../include/common_functions.h"
 #include "../include/fractal_init.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <vector>
 #include <math.h>
 using namespace std;
@@ -10,35 +11,32 @@ using namespace std;
 //all the static functions and variables are declared here to restrict scope to this file
 
 static int ScreenWidth = TOTAL_WIDTH;
-static int ScreenHeight = TOTAL_HEIGHT;
+static int ScreenHeight = TOTAL_HEIGHT + TITLE_BAR_VERTICAL_SIZE;
 
 static void display( void );
 static void click( int button, int state, int x, int y);
-static void drag( int x, int y );
 static void reshape( int w, int h );
 static void draw_fractal_display();
 static void draw_all_fractals();
 static void screen_to_gl(float & x, float & y);
 static void increment_iterations();
 static void decrement_iterations();
-static void draw_previous_toggle();
-static void reset();
 static void recalculate_fractal();
-
+static void draw_text();
 extern vector<point> initiator_points;
 extern vector<point> generator_points;
 
 vector< vector<point> > fractal_iterations;
 static int number_of_iterations = 1;
 static bool draw_previous = false;
-static float draw_toggle[] = { .7,0,0};
 void initFractalDisplay( void )
 {
-    glutCreateWindow( "Fractal Display" );          // window title
     glutInitWindowSize( ScreenWidth, ScreenHeight );    // initial window size
-    glutInitWindowPosition( 0, ScreenHeight );          // initial window position
-
+    glutInitWindowPosition( ScreenWidth/2, 0 );          // initial window position
+    glutCreateWindow( "Fractal Display" );          // window title
+    
     glClearColor( 0.0, 0.0, 0.0, 1.0 );         // use black for glClear command
+    fractal_iterations.push_back( initiator_points );
 
     // callback routines
     glutDisplayFunc( display );             // how to redisplay window
@@ -53,9 +51,9 @@ static void display( void )
     glClear( GL_COLOR_BUFFER_BIT );
     draw_menu_backgrounds();
     draw_up_down_arrows();
-    draw_reset_button();
+    draw_go_button();
     draw_text_area();
-    //draw_text();
+    draw_text();
     draw_border();
     if( !draw_previous )
         draw_fractal_display();
@@ -98,10 +96,10 @@ static void reshape( int w, int h )
     // how to project 3-D scene onto 2-D
     glMatrixMode( GL_PROJECTION );      // use an orthographic projection
     glLoadIdentity();                   // initialize transformation matrix
-    if ( w > h )                        // use width:height aspect ratio to specify view extents
-        gluOrtho2D( 0, TOTAL_WIDTH * w / h, 0 , TOTAL_HEIGHT );
+    if ( w > ( h * ASPECT_RATIO ) )                        // use width:height aspect ratio to specify view extents
+        gluOrtho2D( 0, TOTAL_WIDTH * w / ( h * ASPECT_RATIO ), 0 , TOTAL_HEIGHT );
     else
-        gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * h / w );
+        gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * ( h * ASPECT_RATIO )/ w );
     glViewport( 0, 0, w, h );           // adjust viewport to new window
 }
 
@@ -117,44 +115,50 @@ static void click( int button, int state, int x, int y )
         {
             if(up_pressed(float_x,float_y))
             {
-                printf("UP\n");
                 increment_iterations();
             }
             else if(down_pressed(float_x,float_y))
             {
-                printf("Down.\n");
                 decrement_iterations();
             }
             else if( go_pressed(float_x, float_y) )
             {    
-                printf("Go.\n");
+                fractal_iterations.clear();
+                fractal_iterations.push_back( initiator_points );
                 recalculate_fractal();
             }
-            /*else if( display_all_pressed(float_x, float_y))
-            {
-                printf("Toggle Display. \n");
-                draw_previous_toggle();
-            }*/ 
         }
     }
 
 }
 
-static void draw_previous_toggle()
+static void draw_text()
 {
-    draw_previous = !draw_previous;
-    /*if(!draw_previous)
-        draw_toggle = {.7,0,0};
-    else
-        draw_toggle = {0,.7,0};*/
+    char temp_str[10];
+    glColor3f(0,0,0);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - ITERATION_HORIZONTAL_OFFSET ,RIGHT_MENU_CENTER_Y + ITERATION_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Iterations");
+    glPopMatrix();
+ 
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - ITERATION_NUM_HORIZONTAL_OFFSET, RIGHT_MENU_CENTER_Y - ITERATION_NUM_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    sprintf(temp_str, "%02d" ,number_of_iterations - 1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)temp_str);
+    glPopMatrix();
 }
+
 
 static void increment_iterations()
 {
-    if( number_of_iterations == 6)
+    if(number_of_iterations >= 7 )
         return;
     number_of_iterations++;
-    if( fractal_iterations.size()-1 < number_of_iterations)
+    if( fractal_iterations.size() < number_of_iterations)
         recalculate_fractal();
     glutPostRedisplay();
 }
@@ -169,9 +173,7 @@ static void decrement_iterations()
 
 void recalculate_fractal( void )
 {
-    fractal_iterations.clear();
-    fractal_iterations.push_back( initiator_points );
-    for( int i = 1; i < number_of_iterations; i++ )
+    for( int i = fractal_iterations.size(); i < number_of_iterations; i++ )
     {
         vector<point> temp_iteration;
         for( unsigned int j = 0; j < (fractal_iterations[i-1].size()-1); j++)
@@ -209,23 +211,24 @@ void recalculate_fractal( void )
         fractal_iterations.push_back(temp_iteration);
         temp_iteration.clear();
     }
+    glutPostRedisplay();
 }
 
 static void screen_to_gl(float & x, float & y)
 {
-    if(ScreenWidth == ScreenHeight)
+    if(ScreenWidth == ScreenHeight * ASPECT_RATIO )
     {
         x = (float)x / ScreenWidth * TOTAL_WIDTH;
         y = (float)y / ScreenHeight * TOTAL_HEIGHT;
     }
-    else if(ScreenWidth > ScreenHeight)
+    else if(ScreenWidth > ScreenHeight * ASPECT_RATIO)
     {
         x = (float)x / ScreenHeight * TOTAL_WIDTH;
-        y = (float)y / ScreenHeight * TOTAL_HEIGHT;
+        y = (float)y / ScreenHeight * ASPECT_RATIO * TOTAL_HEIGHT;
     }
     else
     {
         x = (float)x / ScreenWidth * TOTAL_WIDTH;
-        y = (float)y / ScreenWidth * TOTAL_HEIGHT;
+        y = (float)y / ( ScreenWidth / ASPECT_RATIO ) * TOTAL_HEIGHT;
     }
 }

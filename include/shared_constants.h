@@ -43,12 +43,16 @@
 #define RIGHT_MENU_SPACE 10
 
 #define VERTICES_HORIZONTAL_OFFSET 32
+#define ITERATION_HORIZONTAL_OFFSET 40
 #define VERTICE_NUM_HORIZONTAL_OFFSET 15
+#define ITERATION_NUM_HORIZONTAL_OFFSET 15
 #define RESET_HORIZONTAL_OFFSET 25
 #define GO_HORIZONTAL_OFFSET 5
 
 #define VERTICES_VERTICAL_OFFSET 20
+#define ITERATION_VERTICAL_OFFSET 20
 #define VERTICE_NUM_VERTICAL_OFFSET 20
+#define ITERATION_NUM_VERTICAL_OFFSET 20
 #define RESET_VERTICAL_OFFSET 10
 #define GO_VERTICAL_OFFSET 10
 
@@ -67,7 +71,7 @@
 
 //Some handy mouse handling constants provided by Dr. Weiss
 const int MouseButtonPress	= 0;
-const int MouseButtonRelease	= 1;
+const int MouseButtonRelease= 1;
 const int MouseLeftButton	= 0;
 const int MouseMiddleButton	= 1; //unused
 const int MouseRightButton	= 2; //unused

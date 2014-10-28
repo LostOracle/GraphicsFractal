@@ -264,6 +264,7 @@ void draw_text_area()
         x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
         glVertex2f(x,y);
     glEnd();
+
 }
 
 void draw_border()
