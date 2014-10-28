@@ -25,7 +25,7 @@ static void recalculate_fractal();
 static void draw_text();
 extern vector<point> initiator_points;
 extern vector<point> generator_points;
-
+static vector<point> tmp;
 vector< vector<point> > fractal_iterations;
 static int number_of_iterations = 1;
 static bool draw_previous = false;
@@ -37,7 +37,8 @@ void initFractalDisplay( void )
     
     glClearColor( 0.0, 0.0, 0.0, 1.0 );         // use black for glClear command
     fractal_iterations.push_back( initiator_points );
-
+    tmp = generator_points;
+    recalculate_fractal();
     // callback routines
     glutDisplayFunc( display );             // how to redisplay window
     glutReshapeFunc( reshape );             // how to resize window
@@ -49,16 +50,17 @@ void initFractalDisplay( void )
 static void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT );
-    draw_menu_backgrounds();
-    draw_up_down_arrows();
-    draw_go_button();
-    draw_text_area();
-    draw_text();
-    draw_border();
-    if( !draw_previous )
+     if( !draw_previous )
         draw_fractal_display();
     else
         draw_all_fractals();
+    draw_menu_backgrounds();
+    draw_up_down_arrows();
+    draw_go_button();
+    draw_toggle_button( draw_previous);
+    draw_text_area();
+    draw_text();
+    draw_border();
     glFlush();
     glutSwapBuffers();
 }
@@ -122,10 +124,16 @@ static void click( int button, int state, int x, int y )
                 decrement_iterations();
             }
             else if( go_pressed(float_x, float_y) )
-            {    
+            {   
+                tmp = generator_points;
                 fractal_iterations.clear();
                 fractal_iterations.push_back( initiator_points );
                 recalculate_fractal();
+            }
+            else if( toggle_pressed(float_x, float_y) )
+            {
+                draw_previous = !draw_previous;
+                glutPostRedisplay();
             }
         }
     }
@@ -158,8 +166,6 @@ static void increment_iterations()
     if(number_of_iterations >= 7 )
         return;
     number_of_iterations++;
-    if( fractal_iterations.size() < number_of_iterations)
-        recalculate_fractal();
     glutPostRedisplay();
 }
 
@@ -173,15 +179,13 @@ static void decrement_iterations()
 
 void recalculate_fractal( void )
 {
-    for( int i = fractal_iterations.size(); i < number_of_iterations; i++ )
+    for( int i = fractal_iterations.size(); i < 8; i++ )
     {
         vector<point> temp_iteration;
         for( unsigned int j = 0; j < (fractal_iterations[i-1].size()-1); j++)
         {
             point end_point(fractal_iterations[i-1][j+1]);
             point start_point(fractal_iterations[i-1][j]);
-            vector<point> tmp = generator_points;
-
             point first_point(tmp[0].x, tmp[0].y);
             for(unsigned int k = 0; k < tmp.size(); k++ )
             {

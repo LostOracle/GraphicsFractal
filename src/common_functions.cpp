@@ -221,6 +221,70 @@ void draw_reset_button()
     glPopMatrix();
 }
 
+/******************************************************************************
+ * Function draw_go_button
+ * Parameters: none
+ * Returns: none
+ * Description: This
+ * */
+void draw_toggle_button(bool toggle_color)
+{
+    float x,y;
+    //Reset Button
+    if(toggle_color)
+        glColor3fv(GO_BUTTON_COLOR);
+    else
+        glColor3fv(RESET_BUTTON_COLOR);
+    glBegin(GL_POLYGON);
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        y = RIGHT_MENU_HEIGHT - TEXT_AREA_HEIGHT - RIGHT_MENU_SPACE;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+
+        y = RIGHT_MENU_HEIGHT - RIGHT_MENU_SPACE;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+    glEnd();
+    glColor3fv(BORDER_COLOR);
+    glBegin(GL_LINE_LOOP);
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        y = RIGHT_MENU_HEIGHT - TEXT_AREA_HEIGHT - RIGHT_MENU_SPACE;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+
+        y = RIGHT_MENU_HEIGHT - RIGHT_MENU_SPACE;
+        glVertex2f(x,y);
+
+        x = RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0;
+        glVertex2f(x,y);
+    glEnd();
+    
+    //Display the Go button text
+    glColor3fv(Black);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(RIGHT_MENU_CENTER_X - TOGGLE_HORIZONTAL_OFFSET, RIGHT_MENU_HEIGHT - TOGGLE_VERTICAL_OFFSET,0);
+    glScalef(0.15,0.15,1);
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Toggle");
+    glPopMatrix();
+}
+
+bool toggle_pressed( float x, float y )
+{
+    if(x >= RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0 &&
+       x <= RIGHT_MENU_CENTER_X + TEXT_AREA_HEIGHT/2.0 &&
+       y <= RIGHT_MENU_HEIGHT - RIGHT_MENU_SPACE &&
+       y >= RIGHT_MENU_HEIGHT - TEXT_AREA_HEIGHT - RIGHT_MENU_SPACE )
+        return true;
+    return false;
+}
+
 bool go_pressed(float x, float y)
 {
     if(x >= RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0 &&
