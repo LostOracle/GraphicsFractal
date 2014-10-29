@@ -325,7 +325,7 @@ void draw_toggle_button(bool toggle_color)
 bool toggle_pressed( float x, float y )
 {
     if(x >= RIGHT_MENU_CENTER_X - TEXT_AREA_WIDTH/2.0 &&
-       x <= RIGHT_MENU_CENTER_X + TEXT_AREA_HEIGHT/2.0 &&
+       x <= RIGHT_MENU_CENTER_X + TEXT_AREA_WIDTH/2.0 &&
        y <= RIGHT_MENU_HEIGHT - RIGHT_MENU_SPACE &&
        y >= RIGHT_MENU_HEIGHT - TEXT_AREA_HEIGHT - RIGHT_MENU_SPACE )
         return true;

@@ -41,6 +41,6 @@ static bool draw_previous = false;
 static int ScreenWidth = TOTAL_WIDTH;
 static int ScreenHeight = TOTAL_HEIGHT;
 static vector<point> tmp;
-#define MAX_ITERATIONS 8
+#define MAX_ITERATIONS 9
 
 #endif

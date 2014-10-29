@@ -206,7 +206,7 @@ static void click( int button, int state, int x, int y )
  *****************************************************************************/
 static void increment_vertices()
 {
-    if(num_vertices >= 20)
+    if(num_vertices >= 10)
         return;
     num_vertices++;
     new_initiator(); 

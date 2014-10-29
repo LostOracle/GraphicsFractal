@@ -295,8 +295,8 @@ static void screen_to_gl(float & x, float & y)
     }
     else if(ScreenWidth > ScreenHeight * ASPECT_RATIO)
     {
-        x = (float)x / ScreenHeight * TOTAL_WIDTH;
-        y = (float)y / ScreenHeight * ASPECT_RATIO * TOTAL_HEIGHT;
+        x = (float)x / (ScreenHeight * ASPECT_RATIO) * TOTAL_WIDTH;
+        y = (float)y / ScreenHeight * TOTAL_HEIGHT;
     }
     else
     {
