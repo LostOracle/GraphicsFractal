@@ -1,3 +1,10 @@
+/******************************************************************************
+ * File: generator.cpp
+ * Authors: Ian Carlson, Christopher Smith
+ * Description: The generator window allows the user to draw the generator
+ *  pattern for generating the fractal.
+ *****************************************************************************/
+
 // include files
 #include <cstdlib>
 #include <iostream>
@@ -34,22 +41,30 @@ static void reset();
 static void increment_vertices();
 static void decrement_vertices();
 
+//This is shared with fractal_display
 vector<point> generator_points;
+
 static int acquired_point = -1;
-int num_vertices = 5;
+static int num_vertices = 5;
 
-
+/******************************************************************************
+ * Function: initGenerator
+ * Paramters: none
+ * Returns: none
+ * Description: initialize the generator window and set up the default fractal
+ *****************************************************************************/
 void initGenerator( void )
 {
-    glutInitWindowSize( ScreenWidth, ScreenHeight );    // initial window size
-    glutInitWindowPosition( 0, ScreenHeight + TITLE_BAR_VERTICAL_SIZE );          // initial window position
-    glutCreateWindow( "Generator" );          // window title
+    //set up the window
+    glutInitWindowSize( ScreenWidth, ScreenHeight );
+    glutInitWindowPosition( 0, ScreenHeight + TITLE_BAR_VERTICAL_SIZE );
+    glutCreateWindow( "Generator" );
 
-    glClearColor( 0.0, 0.0, 0.0, 1.0 );         // use black for glClear command
+    glClearColor( 0.0, 0.0, 0.0, 1.0 );
 
     // callback routines
-    glutDisplayFunc( display );             // how to redisplay window
-    glutReshapeFunc( reshape );             // how to resize window
+    glutDisplayFunc( display );
+    glutReshapeFunc( reshape );
     glutMouseFunc( click );
     glutMotionFunc( drag );
 
@@ -57,12 +72,20 @@ void initGenerator( void )
     init_default_fractal();
 }
 
+/******************************************************************************
+ * Function: init_default_fractal
+ * Parameters: none
+ * Returns: none
+ * Description: Initializes the generator to produce the Koch Snowflake
+ *****************************************************************************/
 static void init_default_fractal()
 {
-    //center at 250,250, equilateral triangle
     generator_points.clear();
+    num_vertices = 5;
+    
     point p(BORDER_BUFFER,DRAW_WINDOW_HEIGHT/2.0);
     generator_points.push_back(p);
+    
     p.x = BORDER_BUFFER + 1/3.0*(DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER);
     generator_points.push_back(p);
     
@@ -78,6 +101,12 @@ static void init_default_fractal()
     generator_points.push_back(p);
 }
 
+/******************************************************************************
+ * Function: display
+ * Paramters: none
+ * Returns: none
+ * Description: redraws the generator window
+ *****************************************************************************/
 static void display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT );
@@ -92,22 +121,41 @@ static void display( void )
     glutSwapBuffers();
 }
 
+/******************************************************************************
+ * Function: draw_generator
+ * Parameters: none
+ * Returns: none
+ * Description: Draw the generator pattern
+ *****************************************************************************/
 static void draw_generator()
 {
     glColor3f(1,1,1);
+    
+    //Draw the line segments
     glBegin(GL_LINE_STRIP);
     for(unsigned int i = 0; i < generator_points.size(); i++)
         glVertex2f(generator_points[i].x,generator_points[i].y);
     glEnd();
+ 
+    //Draw the vertices a little larger
     for(unsigned int i = 0; i < generator_points.size(); i++)
         draw_big_point(generator_points[i].x,generator_points[i].y);
 }
 
+/******************************************************************************
+ * Function: new_generator
+ * Paramters: none
+ * Returns: none
+ * Description: Resets the generator when the up or down arrow is pressed.
+ *****************************************************************************/
 static void new_generator()
 {
+    //get rid of the old generator
+    generator_points.clear();
+    
+    //Evenly distribute the points along the center of the window
     point p(0,DRAW_WINDOW_HEIGHT/2.0);
     float delta = (DRAW_WINDOW_WIDTH - 2*BORDER_BUFFER)/(num_vertices-1);
-    generator_points.clear();
     for(float x = BORDER_BUFFER; x <= DRAW_WINDOW_WIDTH - BORDER_BUFFER; x += delta)
     {
         p.x = x;
@@ -115,86 +163,127 @@ static void new_generator()
     }
 }
 
+/******************************************************************************
+ * Function: draw_text
+ * Parameters: none
+ * Returns: none
+ * Description: Draw the "Vertices" text and the current number of vertices
+ *****************************************************************************/
 static void draw_text()
 {
     char temp_str[10];
-    //Displays the Player 1 string to the screen
+    //draw vertices text 
     glColor3f(0,0,0);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(RIGHT_MENU_CENTER_X - VERTICES_HORIZONTAL_OFFSET ,RIGHT_MENU_CENTER_Y + VERTICES_VERTICAL_OFFSET,0);
+    glTranslatef(RIGHT_MENU_CENTER_X - VERTICES_HORIZONTAL_OFFSET ,
+                 RIGHT_MENU_CENTER_Y + VERTICES_VERTICAL_OFFSET,0);
     glScalef(0.15,0.15,1);
     glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Vertices");
     glPopMatrix();
     
+    //show the number of vertices
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glTranslatef(RIGHT_MENU_CENTER_X - VERTICE_NUM_HORIZONTAL_OFFSET, RIGHT_MENU_CENTER_Y - VERTICE_NUM_VERTICAL_OFFSET,0);
+    glTranslatef(RIGHT_MENU_CENTER_X - VERTICE_NUM_HORIZONTAL_OFFSET, 
+                 RIGHT_MENU_CENTER_Y - VERTICE_NUM_VERTICAL_OFFSET,0);
     glScalef(0.15,0.15,1);
     sprintf(temp_str,"%02d",num_vertices);
     glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)temp_str);
     glPopMatrix();
 }
 
-
+/******************************************************************************
+ * Function: reshape - Callback function
+ * Paramters:
+ *  w - new width of the screen in pixels
+ *  h - new height of the screen in pixels
+ * Returns: none
+ * Description: Scale the window properly on user resize.
+ *
+ * Base on code from Dr. Weiss. Except the aspect ratio. We take credit for
+ *  that part
+ *****************************************************************************/
 static void reshape( int w, int h )
 {
     // store new window dimensions globally
     ScreenWidth = w;
     ScreenHeight = h;
 
-    // how to project 3-D scene onto 2-D
-    glMatrixMode( GL_PROJECTION );      // use an orthographic projection
-    glLoadIdentity();                   // initialize transformation matrix
-    if ( w > (h*ASPECT_RATIO) )                        // use width:height aspect ratio to specify view extents
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    if ( w > (h*ASPECT_RATIO) )
         gluOrtho2D( 0, TOTAL_WIDTH * w / (h*ASPECT_RATIO), 0 , TOTAL_HEIGHT );
     else
         gluOrtho2D( 0, TOTAL_WIDTH, 0, TOTAL_HEIGHT * (h*ASPECT_RATIO) / w );
-    glViewport( 0, 0, w, h );           // adjust viewport to new window
+    glViewport( 0, 0, w, h );
 }
 
-// callback function for mouse button click events
+/******************************************************************************
+ * Function: click - Callback function
+ * Paramters:
+ *  button - which button was clicked
+ *  state - pressed or release
+ *  x - x coordinate of the click in pixels
+ *  y - y coordinate of the click in pixels
+ * Returns: none
+ * Description: Convert pixel coordinates to gl coordinates and check for
+ *  button presses and allow dragging of points.
+ *****************************************************************************/
 static void click( int button, int state, int x, int y )
 {
+    //flip the y coordinate to up is +
     float float_y = ScreenHeight - y;
     float float_x = x;
+    
+    //convert to gl coordinates
     screen_to_gl(float_x,float_y);
+
+    //handle left clicks
     if(button == MouseLeftButton)
     {
         if(state == MouseButtonPress)
         {
             if(reset_pressed(float_x,float_y))
-            {
-                printf("Reset\n");
                 reset();
-            }
             else if(up_pressed(float_x,float_y))
-            {
-                printf("UP\n");
                 increment_vertices();
-            }
             else if(down_pressed(float_x,float_y))
-            {
-                printf("Down.\n");
                 decrement_vertices();
-            }
             else
                 pickup_point(float_x,float_y);
         }
+
+        //let go of the dragged point
         else if(state == MouseButtonRelease)
-        {
-            //release point
             release_point();
-        }
     }
 }
 
+/******************************************************************************
+ * Function: reset
+ * Paramters: none
+ * Returns: none
+ * Description: Reset the generator to its default state.
+ *****************************************************************************/
 static void reset()
 {
     init_default_fractal();
     glutPostRedisplay();
 }
 
+/******************************************************************************
+ * Function: increment_vertices
+ * Paramters: none
+ * Returns: none
+ * Description: Increase the number of  vertices to be drawn in the generator
+ *  pattern. Then reset the pattern because it would be really hard to insert
+ *  a new point without disrupting the old pattern.
+ *
+ *  Also make sure the user doesn't pick too high of a value. This thing
+ *  can really eat up ram on highly iterated fractals. We crashed the lab
+ *  computers a few times before we found these limits.
+ *****************************************************************************/
 static void increment_vertices()
 {
     if(num_vertices >= 10)
@@ -204,6 +293,17 @@ static void increment_vertices()
     glutPostRedisplay();
 }
 
+/******************************************************************************
+ * Function: decrement_vertices
+ * Paramters: none
+ * Returns: none
+ * Description: Decrease the number of vertices to be drawn in the generator
+ *  pattern. Then reset the pattern because it would be really hard to delete
+ *  a point without disrupting the old pattern.
+ *
+ *  Also make sure the user doesn't have too few points to actually make a
+ *  fractal.
+ *****************************************************************************/
 static void decrement_vertices()
 {
     if(num_vertices <= 3)
@@ -213,6 +313,13 @@ static void decrement_vertices()
     glutPostRedisplay();
 }
 
+/******************************************************************************
+ * Function: pickup_point
+ * Paramters: none
+ * Returns: none
+ * Description: Check if the user clicked near enough to a point that they
+ *  probably want to drag it, and flag that point for dragging.
+ *****************************************************************************/
 static void pickup_point(float x, float y)
 {
     float min_d = -1;
@@ -232,40 +339,78 @@ static void pickup_point(float x, float y)
         acquired_point = min_index;
 }
 
+/******************************************************************************
+ * Function: release_point
+ * Paramters: none
+ * Returns: none
+ * Description: Unflag a point for dragging because the user release the button
+ *****************************************************************************/
 static void release_point()
 {
     acquired_point = -1;
 }
 
-// callback function for mouse dragging events
+/******************************************************************************
+ * Function: drag - Callback function
+ * Paramters:
+ *  x - x coordinate of the mouse drag in pixels
+ *  y - y coordinate fo the mouse drag in pixels
+ * Returns: none
+ * Description: Update a point's location if the user is dragging it.
+ *****************************************************************************/
 static void drag( int x, int y )
 {
     float float_x = x;
     float float_y = ScreenHeight - y;
+
+    //convert to gl coordinates
     screen_to_gl(float_x,float_y);
+
+    //move the point the user is dragging, if any
     if(acquired_point != -1)
         move_point(float_x, float_y);
-    //convert screen coordinates into GL coordinates
-    printf("Mouse dragged to (%f,%f)\n",float_x,float_y);
 }
 
+/******************************************************************************
+ * Function: move_point
+ * Parameters:
+ *  x - x coordinate we want to move the point to in gl coordinates
+ *  y - y coordinate we want to move the point to in gl coordinates
+ * Returns: none
+ * Description: Try to move the point to the dragged location, but snap it
+ *  back to the drawing area if the user tried to drag it outside.
+ *****************************************************************************/
 static void move_point(float x, float y)
 {
+    //check the x bounds
     if(x < BORDER_BUFFER)
         x = BORDER_BUFFER;
     else if( x > DRAW_WINDOW_WIDTH - BORDER_BUFFER )
         x = DRAW_WINDOW_WIDTH - BORDER_BUFFER;
     
+    //check the y bounds
     if( y < BORDER_BUFFER )
         y = BORDER_BUFFER;
     else if( y > DRAW_WINDOW_HEIGHT - BORDER_BUFFER )
         y = DRAW_WINDOW_HEIGHT - BORDER_BUFFER;
     
+    //update the point location
     generator_points[acquired_point].x = x;
     generator_points[acquired_point].y = y;
+
+    //redraw
     glutPostRedisplay();
 }
 
+/******************************************************************************
+ * Function: screen_to_gl
+ * Paramters:
+ *  x - x coordinate to convert
+ *  y - y coordinate to convet
+ * Returns: modified x and y
+ * Description: Converts screen coordinates to gl coordinates, respecting
+ *  scale and aspect ratio to make life easier for the rest of the program.
+ *****************************************************************************/
 static void screen_to_gl(float & x, float & y)
 {
     if(ScreenWidth == ScreenHeight*ASPECT_RATIO)
