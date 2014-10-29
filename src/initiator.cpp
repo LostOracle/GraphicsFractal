@@ -41,7 +41,7 @@ static void init_default_fractal()
     //center at 250,250, equilateral triangle
     num_vertices = 4;
     initiator_points.clear();
-    point p(250,335);
+    point p(250,410);
     initiator_points.push_back(p);
 
     p.x = 250 + (175*(-sin(-120*M_PI/180.0)));
@@ -53,7 +53,7 @@ static void init_default_fractal()
     initiator_points.push_back(p);
 
     p.x = 250;
-    p.y = 335;
+    p.y = 410;
     initiator_points.push_back(p);
 }
 
