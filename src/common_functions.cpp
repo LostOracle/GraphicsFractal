@@ -307,7 +307,7 @@ void draw_toggle_button(bool toggle_color)
     glPushMatrix();
     glTranslatef(RIGHT_MENU_CENTER_X - TOGGLE_HORIZONTAL_OFFSET, RIGHT_MENU_HEIGHT - TOGGLE_VERTICAL_OFFSET,0);
     glScalef(0.15,0.15,1);
-    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"Toggle");
+    glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)"View All");
     glPopMatrix();
 }
 
