@@ -6,46 +6,7 @@
  * 
  *****************************************************************************/
 
-
-#include "../include/shared_constants.h"
-#include "../include/common_functions.h"
-#include "../include/fractal_init.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
-#include <math.h>
-using namespace std;
-#include<GL/freeglut.h>
-
-//all the static functions and variables are declared here to restrict scope to this file
-static int ScreenWidth = TOTAL_WIDTH;
-static int ScreenHeight = TOTAL_HEIGHT + TITLE_BAR_VERTICAL_SIZE;
-#define MAX_ITERATIONS 8
-//Local file callbacks and fractal display window functions
-static void display( void );
-static void click( int button, int state, int x, int y);
-static void reshape( int w, int h );
-static void draw_fractal_display();
-static void draw_all_fractals();
-static void screen_to_gl(float & x, float & y);
-static void increment_iterations();
-static void decrement_iterations();
-static void recalculate_fractal();
-static void draw_text();
-
-//external vectors that store initiator points and generator points
-extern vector<point> initiator_points;
-extern vector<point> generator_points;
-
-//local temporary vector that stores generator points and resets when go button is pressed
-static vector<point> tmp;
-
-//A vector of vectors that contain points to store every iteration of the fractal
-vector< vector<point> > fractal_iterations;
-static int number_of_iterations = 1;
-//Flag used to display all iterations or just the current iteration
-static bool draw_previous = false;
-
+#include "../include/fractal_display.h"
 
 /******************************************************************************
  * Function: initFractalDisplay
@@ -56,7 +17,8 @@ static bool draw_previous = false;
  *****************************************************************************/
 void initFractalDisplay( void )
 {
-    glutInitWindowSize( ScreenWidth, ScreenHeight );    // initial window size
+    glutInitWindowSize( ScreenWidth + TITLE_BAR_VERTICAL_SIZE/1.65*ASPECT_RATIO, 
+                        ScreenHeight + TITLE_BAR_VERTICAL_SIZE/1.65 );
     glutInitWindowPosition( ScreenWidth/2, 0 );          // initial window position
     glutCreateWindow( "Fractal Display" );          // window title
     
