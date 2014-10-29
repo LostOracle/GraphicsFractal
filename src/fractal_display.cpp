@@ -20,7 +20,7 @@ using namespace std;
 //all the static functions and variables are declared here to restrict scope to this file
 static int ScreenWidth = TOTAL_WIDTH;
 static int ScreenHeight = TOTAL_HEIGHT + TITLE_BAR_VERTICAL_SIZE;
-#define MAX_ITERATIONS 10
+#define MAX_ITERATIONS 8
 //Local file callbacks and fractal display window functions
 static void display( void );
 static void click( int button, int state, int x, int y);
@@ -126,12 +126,11 @@ static void draw_fractal_display()
 static void draw_all_fractals()
 {
     float fade_step = 1.0/number_of_iterations;
-
     //Draws all iterations of the fractal
-    for( int i = 0; i < number_of_iterations; i++)
+    for( int i = number_of_iterations-1; i >= 0; i--)
     {
-        printf( "FADE: %f \n", fade_step);
-        glColor3f(fade_step * i,0, i);
+        
+        glColor3f(0, fade_step * i , 1 - i * fade_step);
         if( i == 0)
             glColor3f(1,1,1);
         glBegin(GL_LINE_STRIP);
