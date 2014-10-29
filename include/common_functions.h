@@ -7,6 +7,10 @@
 #ifndef _COMMON_FUNCTIONS_H_
 #define _COMMON_FUNCTIONS_H_
 
+#include "../include/shared_constants.h"
+#include <GL/freeglut.h>
+#include <math.h>
+
 void draw_menu_backgrounds();
 void draw_text_area();
 void draw_up_down_arrows();

@@ -4,10 +4,6 @@
  * Description: This file contains functions needed by the initiator,
  *  generator, and display_fractal windows.
  *  **************************************************************************/
-
-#include <GL/freeglut.h>
-#include <math.h>
-#include "../include/shared_constants.h"
 #include "../include/common_functions.h"
 
 /******************************************************************************
